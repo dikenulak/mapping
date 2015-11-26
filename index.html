@@ -3,12 +3,14 @@
 <head>
   <title></title>
   <meta charset="utf-8">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
-  <script src="main.js" charset="utf-8"></script>
   <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet"   href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet"href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
   <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
+  <script  src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+  <script src="main.js" charset="utf-8"></script>
 </head>
 <body>
   <div class="container">
@@ -20,11 +22,14 @@
 
       </div>
     </div>
+
     <div class="col-sm-9">
+      <div class="cmap">
       <div id="mapped">
-        <div id="map-canvas" style="height: 500px; width: 500px;"></div>
       </div>
+        <div id="map-canvas" style="height: 400px; width: 800px;"></div>
     </div>
+  </div>
   </div>
   <script >
   var data0;
@@ -61,16 +66,42 @@
     mappintest()
   });
   function mappintest() {
+
     $('#mapped').html('contractname:' + data0.contractname + '<br>' +
          'status:' + data0.status + '<br>' +
         'bidPurchaseDeadline:' + data0.bidPurchaseDeadline + '<br>' +
-        'bidSubmissionDeadline:' + data0.bidSubmissionDeadline+ '<br>')
+        'bidSubmissionDeadline:' + data0.bidSubmissionDeadline+ '<br>'
+      )
   }
   </script>
   <script type="text/javascript">
-  $("#cmap").click(function() {
-    $("#mapped").show(1000);
-  });
+  var planes = [
+    ["7C6B07",-40.99497,174.50808],
+    ["7C6B38",-41.30269,173.63696],
+    ["7C6CA1",-41.49413,173.5421],
+    ["7C6CA2",-40.98585,174.50659],
+    ["C81D9D",-40.93163,173.81726],
+    ["C82009",-41.5183,174.78081],
+    ["C82081",-41.42079,173.5783],
+    ["C820AB",-42.08414,173.96632],
+    ["C820B6",-41.51285,173.53274]
+    ];
+
+        var map = L.map('map-canvas').setView([28.12312, 84.12321], 7);
+        mapLink =
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 10,
+          }).addTo(map);
+
+    for (var i = 0; i < planes.length; i++) {
+      marker = new L.marker([planes[i][1],planes[i][2]])
+        .bindPopup(planes[i][0])
+        .addTo(map);
+    }
+
   </script>
 </body>
 </html>
