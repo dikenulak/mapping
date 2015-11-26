@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
+  <script src="main.js" charset="utf-8"></script>
+  <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"   href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="head">
+      <h1>CONTRACTS VIEWER</h1>
+    </div>
+    <div class="col-sm-3">
+      <div id="map">
+
+      </div>
+    </div>
+    <div class="col-sm-9">
+      <div id="mapped">
+        <div id="map-canvas" style="height: 500px; width: 500px;"></div>
+      </div>
+    </div>
+  </div>
+  <script >
+  var data0;
+  var data1;
+  var data2;
+  var data3;
+  var data4;
+  var data5;
+  var data6;
+  var data7;
+  var data8;
+  var data9;
+  d3.csv("contracts.csv", function(data) {
+    data0 = data[0];
+    data1 = data[1];
+    data2 = data[2];
+    data3 = data[3];
+    data4 = data[4];
+    data5 = data[5];
+    data6 = data[6];
+    data7 = data[7];
+    data8 = data[8];
+    data9 = data[9];
+    var map = d3.select("#map")
+    map.selectAll("li")
+    .data(data)
+    .enter().append("ul")
+    .append("li")
+    .append("a")
+     .attr("id","#cmap")
+    .text(function (d) {
+      return d.contractname;
+    })
+    mappintest()
+  });
+  function mappintest() {
+    $('#mapped').html('contractname:' + data0.contractname + '<br>' +
+         'status:' + data0.status + '<br>' +
+        'bidPurchaseDeadline:' + data0.bidPurchaseDeadline + '<br>' +
+        'bidSubmissionDeadline:' + data0.bidSubmissionDeadline+ '<br>')
+  }
+  </script>
+  <script type="text/javascript">
+  $("#cmap").click(function() {
+    $("#mapped").show(1000);
+  });
+  </script>
+</body>
+</html>
