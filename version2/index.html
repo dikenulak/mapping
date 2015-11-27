@@ -1,0 +1,119 @@
+<!-- Latest compiled and minified CSS -->
+ <link rel="stylesheet"   href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+  <!-- Map-CSS -->
+  <link rel="stylesheet"href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/jquery-csv.js"></script>
+<script  src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+<script>
+  $(function(){
+    // get data by index on click
+    $(document).on("click", ".getData", function(){
+      var index = $(this).data("index");
+      $(this).css("color", "red")
+      getData(index);
+    });
+    // get the data from the csv file
+    $.ajax({
+      type : "GET",
+      dataType : "text",
+      cache : "none",
+      url : "contracts.csv",
+      success:function(resData){
+          var data = $.csv.toArrays(resData);
+          var genData = generateTable(data);
+          $('#contentsHeader').html(genData); // apply the response data from csv
+        }
+      });
+  });
+	function generateTable(data){
+		var html = '';
+		for(var row in data) {
+			var indexData = '';
+			var mapll = '';
+			html += '<tr>\r\n';
+			for(var item in data[row]) {
+				// retrive the first column values
+				if(row!=0 && item == 0){
+					html += '<td><a href="javascript:void(0)" data-index="'+row+'" class="getData">' + data[row][0] + '</a></td>\r\n';
+				}
+				if(row!=0  && item != 0 && data[0][item]!="latlon"){
+					            // heading      :   datas
+					indexData+= "<span>"+ data[0][item]+" : "+data[row][item]+"</span></br>";
+				}
+				if(row!=0  && item != 0 && data[0][item]=="latlon"){
+					            // heading      :   datas
+					mapll+= data[row][item];
+				}
+			}
+			// local storage according to the data index lik index1, index2, index3, index1X
+			localStorage.setItem("index"+row, indexData);
+			localStorage.setItem("mapll"+row, mapll);
+			html += '</tr>\r\n';
+		}
+		return html;
+	}
+	// retrive the data from the stroage by the index
+	function getData(index){
+    var inde = localStorage.getItem("index"+index);
+		// reset the holder content
+		$("#indexContent").html('');
+		// apply the data to holder
+		/*
+			localStorage.getItem("index"+index)
+			retrive the data by the index from local storage
+		*/
+		$("#indexContent").html(inde);
+		// latitude and longitude
+		// alert(localStorage.getItem("mapll"+index));
+    // $("#map-canvas").html(localStorage.getItem("mapll"+index));
+
+     var planes = [
+    ["Banke",28.160859,81.929169],
+  ];
+  var maps = L.map('map-canvas').setView([28.12312, 84.12321], 7);
+  mapLink =
+  '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+  L.tileLayer(
+    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; ' + mapLink + ' Contributors',
+      maxZoom: 10,
+    }).addTo(maps);
+
+    for (var i = 0; i < planes.length; i++) {
+      marker = new L.marker([planes[i][1],planes[i][2]])
+      .bindPopup(planes[i][0])
+      .addTo(maps);
+    }
+	}
+</script>
+<style>
+	.oh{ overflow: hidden; }
+	#contentsHeader{
+		width: 100%;
+		margin-right: 10px;
+		float: left;
+		border-collapse: collapse;
+	}
+	#indexContent{
+		float:left;
+	}
+	span{
+		display: block;
+		border-bottom: 1px solid #000;
+	}
+</style>
+<div class="container">
+   <div class="col-sm-3">
+      <table id="contentsHeader" border="1">&nbsp;</table>
+   </div>
+   <div class="col-sm-5">
+   <div class="row">
+     <div id="indexContent">&nbsp;</div>
+  </div>
+     <!-- map api -->
+ <div id="map-canvas" style="height: 400px; width: 800px;"></div>
+   </div>
+</div>
+
+

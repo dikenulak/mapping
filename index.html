@@ -14,7 +14,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
   <!-- leaflet map js -->
   <script  src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
-  <script src="main.js" charset="utf-8"></script>
 </head>
 <body>
   <div class="container">
@@ -35,27 +34,7 @@
     </div>
   </div>
   <script >
-  var data0;
-  var data1;
-  var data2;
-  var data3;
-  var data4;
-  var data5;
-  var data6;
-  var data7;
-  var data8;
-  var data9;
   d3.csv("contracts.csv", function(data) {
-    data0 = data[0];
-    data1 = data[1];
-    data2 = data[2];
-    data3 = data[3];
-    data4 = data[4];
-    data5 = data[5];
-    data6 = data[6];
-    data7 = data[7];
-    data8 = data[8];
-    data9 = data[9];
     var map = d3.select("#map")
     map.selectAll("li")
     .data(data)
@@ -63,22 +42,20 @@
     .append("li")
     .append("a")
      .attr("id","#cmap")
+     .attr("href", "javascript:void()")
     .text(function (d) {
-      debugger;
-      return d.contractname;
+      for(var row in d){
+        for ( var item in d[row]){
+            if(row!=0 && item == 0){
+          return d[row];
+          }
+          debugger;
+        }
+      }
     })
-    mappintest()
   });
   function mappintest() {
-    $('#mapped').html('contractname:' + data0.contractname + '<br>' +
-         'status:' + data0.status + '<br>' +
-        'bidPurchaseDeadline:' + data0.bidPurchaseDeadline + '<br>' +
-        'bidSubmissionDeadline:' + data0.bidSubmissionDeadline+ '<br>' +
-        'bidOpeningDate:' + data0.bidOpeningDate + '<br>' +
-        'tenderid:' + data0.tenderid+ '<br>' +
-        'publishedIn:'+ data0.publishedIn+ '<br>' +
-        'contractDate:' + data0.contractDate + '<br>'
-      )
+    $('#mapped').html('hello:');
   }
   var planes = [
     ["Banke",28.160859,81.929169],
@@ -97,6 +74,26 @@
       .bindPopup(planes[i][0])
       .addTo(maps);
     }
+// var myData = null;
+// d3.csv("contracts.csv")
+// .row(function(d) { return {contractname: d.contractname, status: d.status, bidPurchaseDeadline :d.bidPurchaseDeadline, bidSubmissionDeadline: d.bidSubmissionDeadline, bidOpeningDate: d.bidOpeningDate, tenderid: d.tenderid, publicationDate: d.publicationDate}; })
+// .get(function(error, rows) {
+//   console.log(rows)
+//   myData = rows;// Now you can assign it
+//   myDataIsReady()// Now you can draw it
+// });
+// function myDataIsReady() {
+//   console.log(myData);// will trace the data that was loaded
+//   $('#mapped').html("contractname:" + myData[1].status + '<br>' )
+//   //          'status:' + data0.status + '<br>' +
+//   //         'bidPurchaseDeadline:' + data0.bidPurchaseDeadline + '<br>' +
+//   //         'bidSubmissionDeadline:' + data0.bidSubmissionDeadline+ '<br>' +
+//   //         'bidOpeningDate:' + data0.bidOpeningDate + '<br>' +
+//   //         'tenderid:' + data0.tenderid+ '<br>' +
+//   //         'publishedIn:'+ data0.publishedIn+ '<br>' +
+//   //         'contractDate:' + data0.contractDate + '<br>'
+//   //       )
+// }
   </script>
 </body>
 </html>
